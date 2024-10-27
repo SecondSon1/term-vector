@@ -71,7 +71,7 @@ public:
   size_t size() const {
     return sz_;
   }
-  
+
   size_t capacity() const {
     return cap_;
   }
@@ -88,6 +88,16 @@ public:
     return arr_[idx];
   }
 
+  const T& back() const {
+    assert(sz_);
+    return arr_[sz_ - 1];
+  }
+
+  T& back() {
+    assert(sz_);
+    return arr_[sz_ - 1];
+  }
+
   void pop_back() {
     if (sz_) {
       --sz_;
@@ -99,6 +109,14 @@ public:
     if (sz_ == cap_)
       reserve(std::max(cap_ * 2, 1ul));
     new (arr_ + sz_) T(value);
+    ++sz_;
+  }
+
+  template <typename... Args>
+  void emplace_back(Args&&... args) {
+    if (sz_ == cap_)
+      reserve(std::max(cap_ * 2, 1ul));
+    new (arr_ + sz_) T(std::forward<Args>(args)...);
     ++sz_;
   }
 
